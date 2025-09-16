@@ -29,12 +29,16 @@ from .generic_utils import (
     load_helicity,
     insert_data,
     save_fasta,
-    validate_design_sequence,
     calculate_averages,
     check_filters,
 )
 from .pyrosetta_utils import pr, pr_relax, score_interface, unaligned_rmsd
-from .biopython_utils import calc_ss_percentage, calculate_clash_score, target_pdb_rmsd
+from .biopython_utils import (
+    calc_ss_percentage, 
+    calculate_clash_score, 
+    target_pdb_rmsd, 
+    validate_design_sequence,
+)
 
 
 def design_binders(
