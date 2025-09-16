@@ -141,3 +141,6 @@ cython_debug/
 *.gcc
 functions/dssp
 params/
+input_pdbs/
+designs/
+**.DS_Store
