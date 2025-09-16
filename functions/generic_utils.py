@@ -12,6 +12,8 @@ import math
 import pandas as pd
 import numpy as np
 
+from .biopython_utils import validate_design_sequence
+
 # Define labels for dataframes
 def generate_dataframe_labels():
     # labels for trajectory
@@ -199,15 +201,20 @@ def load_helicity(advanced_settings):
 def check_jax_gpu():
     devices = jax.devices()
 
-    has_gpu = any(device.platform == 'gpu' for device in devices)
+    def is_accelerator(device):
+        platform = getattr(device, 'platform', '').lower()
+        kind = getattr(device, 'device_kind', '').lower()
+        return platform in {"gpu", "metal"} or "mps" in kind
 
-    if not has_gpu:
-        print("No GPU device found, terminating.")
+    accelerator_devices = [device for device in devices if is_accelerator(device)]
+
+    if not accelerator_devices:
+        print("No GPU or MPS device found, terminating.")
         exit()
-    else:
-        print("Available GPUs:")
-        for i, device in enumerate(devices):
-            print(f"{device.device_kind}{i + 1}: {device.platform}")
+
+    print("Available accelerators:")
+    for i, device in enumerate(accelerator_devices):
+        print(f"{device.device_kind}{i + 1}: {device.platform}")
 
 # check all input files being passed
 def perform_input_check(args):
